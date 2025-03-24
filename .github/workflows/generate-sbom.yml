@@ -68,12 +68,12 @@ jobs:
           name: sbom
           path: ${{ env.PRODUCT_PATH }}build/reports/bom.json
 
-  # store-sbom-data: # stores sbom and metadata in a predefined format for otterdog to pick up
-  #   needs: ['generate-sbom']
-  #   uses: eclipse-csi/workflows/.github/workflows/store-sbom-data.yml@main
-  #   with:
-  #     projectName: 'arc'
-  #     projectVersion: ${{ needs.generate-sbom.outputs.project-version }}
-  #     bomArtifact: 'sbom'
-  #     bomFilename: 'bom.json'
-  #     parentProject: ''
+  store-sbom-data: # stores sbom and metadata in a predefined format for otterdog to pick up
+    needs: ['generate-sbom']
+    uses: eclipse-csi/workflows/.github/workflows/store-sbom-data.yml@main
+    with:
+      projectName: 'arc'
+      projectVersion: ${{ needs.generate-sbom.outputs.project-version }}
+      bomArtifact: 'sbom'
+      bomFilename: 'bom.json'
+      parentProject: 'a75a955e-abd4-4908-b2c4-08a517b63af8'
