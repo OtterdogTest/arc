@@ -48,6 +48,16 @@ jobs:
         run: |
           find . -type f -name "bom.json" -print
 
+      - name: Rename and move all submodule SBOM files
+        run: |
+          mkdir sboms
+          find . -type f -name "bom.json" -print | while read file; do
+            dir_name=$(echo "$file" | cut -d'/' -f2)
+            new_name="${dir_name}_bom.json"
+            cp "$file" "sboms/$new_name"
+          done
+
+
       # - name: Extract product version
       #   id: version
       #   shell: bash
@@ -66,11 +76,11 @@ jobs:
       #     echo "PROJECT_VERSION=$VERSION" >> $GITHUB_OUTPUT
       #     echo "Product version is: $VERSION"
 
-      # - name: Upload sbom
-      #   uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
-      #   with:
-      #     name: sbom
-      #     path: ${{ env.PRODUCT_PATH }}build/reports/bom.json
+      - name: Upload sbom
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        with:
+          name: sbom
+          path: sboms/
 
   # store-sbom-data: # stores sbom and metadata in a predefined format for otterdog to pick up
   #   needs: ['generate-sbom']
