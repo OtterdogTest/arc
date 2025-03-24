@@ -48,12 +48,25 @@ jobs:
         run: |
           find . -type f -name "bom.json" -print
 
-      - name: Rename and move all submodule SBOM files
+      - name: Rename submodule SBOM files
         run: |
+          event="${{ github.event_name }}"
+          ref="${{ github.ref }}"
+          input="${{ github.event.inputs.version }}"
+
+          is_dev=""
+          if [[ "$event" == "push" && "$ref" == refs/heads/* ]] || \
+            [[ "$event" == "workflow_dispatch" && ! "$input" =~ ^v ]]; then
+            is_dev="@dev"
+          fi
+
           mkdir sboms
           find . -type f -name "bom.json" -print | while read file; do
+            version="$(jq -r '.metadata.component.version' < $file)"
+            version="${version}${is_dev}"
+
             dir_name=$(echo "$file" | cut -d'/' -f2)
-            new_name="${dir_name}_bom.json"
+            new_name="${dir_name}_bom_${version}.json"
             cp "$file" "sboms/$new_name"
           done
 
