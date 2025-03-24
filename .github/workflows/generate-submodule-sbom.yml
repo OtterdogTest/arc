@@ -46,7 +46,7 @@ jobs:
 
       - name: Print directory structure
         run: |
-          find . -print
+          find . -type f -name "bom.json" -print
 
       # - name: Extract product version
       #   id: version
