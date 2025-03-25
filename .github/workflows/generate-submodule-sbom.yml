@@ -73,7 +73,7 @@ jobs:
             echo $sbom_list
           done
 
-          echo "List: $sbom_list"
+          echo "List: $sbom_list "
 
           sboms_string=$(IFS=,; echo "${sbom_list[*]}")
           echo "SBOMS=$sboms_string" >> $GITHUB_OUTPUT
