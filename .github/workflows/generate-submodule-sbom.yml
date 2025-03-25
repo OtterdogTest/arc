@@ -69,6 +69,8 @@ jobs:
             cp "$file" "sboms/$new_name"
 
             sbom_list+=("$new_name")
+            echo $new_name
+            echo $sbom_list
           done
 
           echo "List: $sbom_list"
