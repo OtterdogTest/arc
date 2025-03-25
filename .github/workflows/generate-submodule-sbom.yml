@@ -68,12 +68,12 @@ jobs:
             new_name="${dir_name}_bom_${version}.json"
             cp "$file" "sboms/$new_name"
 
-            sbom_list+=("\"$new_name\"")
+            sbom_list+=("$new_name")
           done
 
-          echo "SBOMS=[$(IFS=,; echo "${sbom_list[*]}")]" >> $GITHUB_ENV
-          echo "SBOMS=${{ env.SBOMS }}" >> $GITHUB_OUTPUT
-          echo $SBOMS
+          sboms_string=$(IFS=,; echo "${sbom_list[*]}")
+          echo "SBOMS=$sboms_string" >> $GITHUB_OUTPUT
+          echo "Collected SBOMs: $sboms_string"
 
       - name: Upload sbom
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
@@ -87,7 +87,7 @@ jobs:
     steps:
       - name: Print SBOMS
         run: |
-          echo ${{ needs.generate-sbom.outputs.sboms }}
+          echo "SBOM Files: ${{ needs.generate-sbom.outputs.sboms }}"
 
   # store-sbom-data: # stores sbom and metadata in a predefined format for otterdog to pick up
   #   needs: ['generate-sbom']
