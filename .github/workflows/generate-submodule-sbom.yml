@@ -68,7 +68,7 @@ jobs:
             new_name="${dir_name}_bom_${version}.json"
             cp "$file" "sboms/$new_name"
 
-            sbom_list+=("$new_name")
+            sbom_list+="$new_name"
             echo "new name: $new_name"
             echo "list: $sbom_list"
           done
