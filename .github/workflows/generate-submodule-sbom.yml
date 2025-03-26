@@ -26,7 +26,7 @@ jobs:
   generate-sbom:
     runs-on: ubuntu-latest
     outputs:
-      sboms: ${{ steps.get-sboms.outputs.SBOMS }}
+      sboms: ${{ steps.get-sboms.outputs.sboms }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -70,8 +70,8 @@ jobs:
       - name: Get SBOMs names
         id: get-sboms
         run: |
-          sboms=($(ls ./sboms/))
-          echo "Files: $sboms"
+          sboms=($(ls -f sboms/))
+          echo $sboms
 
       - name: Upload sbom
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
