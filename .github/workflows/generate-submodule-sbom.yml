@@ -82,11 +82,50 @@ jobs:
         id: get-sboms
         run: |
           sboms_list=($(ls -A ./sboms/))
-          sboms_json=$(printf '"%s", ' "${sboms_list[@]}" | sed 's/, $//')
-          sboms_json="[$sboms_json]"
+          
+          sboms=()
+          projectnames=()
+          projectversions=()
+          parents=()
 
+          for sbom in "${sboms_list[@]}"; do
+            sboms+=("$sbom")
+
+            # Parse project name and version
+            projectName="${sbom%%_bom_*}"
+            projectnames+=("$projectName")
+
+            projectVersion="${sbom#*_bom_}"
+            projectVersion="${projectVersion%.json}"
+            projectversions+=("$projectVersion")
+
+            # Get parent project from env based on project name
+            parentProject="$(printenv "$projectName")"
+            parents+=("$parentProject")
+
+          done
+
+          # Convert arrays to JSON
+          sboms_json=$(printf '"%s", ' "${sboms[@]}" | sed 's/, $//')
+          projectnames_json=$(printf '"%s", ' "${projectnames[@]}" | sed 's/, $//')
+          projectversions_json=$(printf '"%s", ' "${projectversions[@]}" | sed 's/, $//')
+          parents_json=$(printf '"%s", ' "${parents[@]}" | sed 's/, $//')
+
+          sboms_json="[$sboms_json]"
+          projectnames_json="[$projectnames_json]"
+          projectversions_json="[$projectversions_json]"
+          parents_json="[$parents_json]"
+
+          # Print
           echo "sboms=$sboms_json" >> $GITHUB_OUTPUT
-          echo "SBOM names to upload: ${sboms_json}"
+          echo "projectnames=$projectnames_json" >> $GITHUB_OUTPUT
+          echo "projectversions=$projectversions_json" >> $GITHUB_OUTPUT
+          echo "parents=$parents_json" >> $GITHUB_OUTPUT
+
+          echo "SBOMs: $sboms_json"
+          echo "Project Names: $projectnames_json"
+          echo "Project Versions: $projectversions_json"
+          echo "Parents: $parents_json"
 
       - name: Upload sbom
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
@@ -94,30 +133,12 @@ jobs:
           name: sbom
           path: sboms/
 
-  test-matrix:
-      needs: ['generate-sbom']
-      runs-on: ubuntu-latest
-      strategy:
-        matrix:
-          sbom: ${{ fromJson(needs.generate-sbom.outputs.sboms) }}
-      steps:
-        - name: Print parsed parameters
-          run: |
-            # Print the parsed project name and version
-            echo "Project Name: ${matrix.sbom%%_bom_*}"
-            echo "Project Version: $${{ ${matrix.sbom#*_bom_}" && projectVersion="${projectVersion%.json}}}"
-            echo "SBOM Name: ${{ matrix.sbom }}"
-            echo "Parent ID: $(printenv "${${{ matrix.sbom }}%%_bom_*}")"
-      # uses: eclipse-csi/workflows/.github/workflows/store-sbom-data.yml@main
-      # with:
-      #   projectName: ${${{ matrix.sbom }}%%_bom_*}
-      #   projectVersion: '${sbom_name#*_bom_}" && projectVersion="${projectVersion%.json}'
-      #   bomArtifact: 'sbom'
-      #   bomFilename: '${{ matrix.sbom }}'
-      #   parentProject: '$(printenv "${${{ matrix.sbom }}%%_bom_*}")'
-
-
-
+  # test-matrix:
+  #     needs: ['generate-sbom']
+  #     runs-on: ubuntu-latest
+  #     strategy:
+  #       matrix:
+  #         sbom: ${{ fromJson(needs.generate-sbom.outputs.sboms) }}
       # steps:
       #   - name: Parse parameters from sboms list
       #     run: |
@@ -143,7 +164,13 @@ jobs:
       #       echo "Parent ID: $PARENT_PROJECT"
 
       #   # - name: Upload to DependencyTrack
-
+            # uses: eclipse-csi/workflows/.github/workflows/store-sbom-data.yml@main
+            # with:
+            #   projectName: ${${{ matrix.sbom }}%%_bom_*}
+            #   projectVersion: '${sbom_name#*_bom_}" && projectVersion="${projectVersion%.json}'
+            #   bomArtifact: 'sbom'
+            #   bomFilename: '${{ matrix.sbom }}'
+            #   parentProject: '$(printenv "${${{ matrix.sbom }}%%_bom_*}")'
 
 
 
