@@ -145,46 +145,22 @@ jobs:
           projectName: ${{ fromJson(needs.generate-sbom.outputs.projectnames) }}
           projectVersion: ${{ fromJson(needs.generate-sbom.outputs.projectversions) }}
           parentProject: ${{ fromJson(needs.generate-sbom.outputs.parents) }}
-      steps:
-      - name: Print parsed parameters for SBOM
-        run: |
-          echo "SBOM: ${{ matrix.sbom }}"
-          echo "Project Name: ${{ matrix.projectName }}"
-          echo "Project Version: ${{ matrix.projectVersion }}"
-          echo "Parent Project: ${{ matrix.parentProject }}"
+      uses: eclipse-csi/workflows/.github/workflows/store-sbom-data.yml@main
+      with:
+        projectName: ${{ matrix.projectName }}"
+        projectVersion: ${{ matrix.projectVersion }}"
+        bomArtifact: 'sbom'
+        bomFilename: ${{ matrix.sbom }}"
+        parentProject:  ${{ matrix.parentProject }}"
+
+
       # steps:
-      #   - name: Parse parameters from sboms list
-      #     run: |
-      #       sbom_name="${{ matrix.sbom }}"
-      #       echo "SBOM_NAME=$sbom_name" >> $GITHUB_ENV
-
-      #       projectName="${sbom_name%%_bom_*}"
-      #       echo "PROJECT_NAME=$projectName" >> $GITHUB_ENV
-            
-      #       projectVersion="${sbom_name#*_bom_}"
-      #       projectVersion="${projectVersion%.json}"
-      #       echo "PROJECT_VERSION=$projectVersion" >> $GITHUB_ENV
-
-      #       parentProject="$(printenv "$projectName")"
-      #       echo "PARENT_PROJECT=$parentProject" >> $GITHUB_ENV
-
-      #   - name: Print parsed parameters
-      #     run: |
-      #       # Print the parsed project name and version
-      #       echo "Project Name: $PROJECT_NAME"
-      #       echo "Project Version: $PROJECT_VERSION"
-      #       echo "SBOM Name: $SBOM_NAME"
-      #       echo "Parent ID: $PARENT_PROJECT"
-
-      #   # - name: Upload to DependencyTrack
-            # uses: eclipse-csi/workflows/.github/workflows/store-sbom-data.yml@main
-            # with:
-            #   projectName: ${${{ matrix.sbom }}%%_bom_*}
-            #   projectVersion: '${sbom_name#*_bom_}" && projectVersion="${projectVersion%.json}'
-            #   bomArtifact: 'sbom'
-            #   bomFilename: '${{ matrix.sbom }}'
-            #   parentProject: '$(printenv "${${{ matrix.sbom }}%%_bom_*}")'
-
+      # - name: Print parsed parameters for SBOM
+      #   run: |
+      #     echo "SBOM: ${{ matrix.sbom }}"
+      #     echo "Project Name: ${{ matrix.projectName }}"
+      #     echo "Project Version: ${{ matrix.projectVersion }}"
+      #     echo "Parent Project: ${{ matrix.parentProject }}"
 
 
   # store-sbom-data: # stores sbom and metadata in a predefined format for otterdog to pick up
