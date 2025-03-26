@@ -18,6 +18,11 @@ env:
   JAVA_VERSION: '21'
   JAVA_DISTRO: 'temurin'
   PRODUCT_PATH: './'
+  PRODUCTS:
+    arc-spring-boot-starter: '5460d2f8-38c3-478e-9934-46fddb6b7794'
+    arc-streaming-spring-boot-starter: 'f359703e-da69-4e4a-9162-acdd065752ad'
+    arc-view-spring-boot-starter: 'be1b9fea-6c7e-42b3-9f6f-db4102acc085'
+
 
 permissions:
   contents: read
@@ -64,7 +69,15 @@ jobs:
 
             dir_name=$(echo "$file" | cut -d'/' -f2)
             new_name="${dir_name}_bom_${version}.json"
-            cp "$file" "sboms/$new_name"
+            
+            # Check if dir_name exists in the PROJECTS mapping
+            if [[ -v "env.PROJECTS[$dir_name]" ]]; then
+              echo "Project $dir_name exists in the products list."
+              cp "$file" "sboms/$new_name"
+            else
+              echo "Project $dir_name not found in the products list, skipping"
+            fi
+
           done
   
       - name: Get SBOMs names
