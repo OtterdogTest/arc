@@ -18,8 +18,8 @@ env:
   JAVA_VERSION: '21'
   JAVA_DISTRO: 'temurin'
   arc-spring-boot-starter: '5460d2f8-38c3-478e-9934-46fddb6b7794'
-  arc-streaming-spring-boot-starter: 'f359703e-da69-4e4a-9162-acdd065752ad'
-  arc-view-spring-boot-starter: 'be1b9fea-6c7e-42b3-9f6f-db4102acc085'
+  # arc-streaming-spring-boot-starter: 'f359703e-da69-4e4a-9162-acdd065752ad'
+  # arc-view-spring-boot-starter: 'be1b9fea-6c7e-42b3-9f6f-db4102acc085'
 
 
 permissions:
@@ -71,7 +71,7 @@ jobs:
             # Check if dir_name exists in the PROJECTS mapping
             exists=$(printenv "$dir_name" >/dev/null && echo "true" || echo "false")
             if [ "$exists" = "true" ]; then
-              echo "Project $dir_name exists in the products list."
+              echo "Uploading: $dir_name."
               cp "$file" "sboms/$new_name"
             else
               echo "Skipping: $dir_name."
@@ -113,9 +113,7 @@ jobs:
             echo "PROJECT_NAME=$projectName" >> $GITHUB_ENV
             echo "PROJECT_VERSION=$projectVersion" >> $GITHUB_ENV
 
-        - name: Print parsed parameters
-          run: |
-            # Print the parsed project name and version
+            # Print params
             echo "Project Name: $PROJECT_NAME"
             echo "Project Version: $PROJECT_VERSION"
             echo "Parent ID: $(printenv "$PROJECT_NAME")"
