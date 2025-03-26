@@ -109,16 +109,30 @@ jobs:
             
             projectVersion="${sbom_name#*_bom_}"
             projectVersion="${projectVersion%.json}"
+            parentProject=$(printenv "$PROJECT_NAME")
 
             echo "PROJECT_NAME=$projectName" >> $GITHUB_ENV
             echo "PROJECT_VERSION=$projectVersion" >> $GITHUB_ENV
+            echo "SBOM_NAME=$sbom_name" >> $GITHUB_ENV
+            echo "PARENT_PROJECT=$parentProject" >> $GITHUB_ENV
 
         - name: Print parsed parameters
           run: |
             # Print the parsed project name and version
             echo "Project Name: $PROJECT_NAME"
             echo "Project Version: $PROJECT_VERSION"
-            echo "Parent ID: $(printenv "$PROJECT_NAME")"
+            echo "SBOM Name: $SBOM_NAME"
+            echo "Parent ID: $PARENT_PROJECT"
+
+        # - name: Upload to DependencyTrack
+        #   uses: eclipse-csi/workflows/.github/workflows/store-sbom-data.yml@main
+        #   with:
+        #     projectName: ${{ env.PROJECT_NAME }}
+        #     projectVersion: ${{ env.PROJECT_VERSION }}
+        #     bomArtifact: 'sbom'
+        #     bomFilename: '${{ env.SBOM_NAME }}'
+        #     parentProject: '${{ env.PARENT_PROJECT }}'
+
 
   # store-sbom-data: # stores sbom and metadata in a predefined format for otterdog to pick up
   #   needs: ['generate-sbom']
