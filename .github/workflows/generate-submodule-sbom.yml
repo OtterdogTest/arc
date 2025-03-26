@@ -69,29 +69,24 @@ jobs:
             new_name="${dir_name}_bom_${version}.json"
             
             # Check if dir_name exists in the PROJECTS mapping
-            echo $dir_name
             exists=$(printenv "$dir_name" >/dev/null && echo "true" || echo "false")
-            echo "exists: $exists"
             if [ "$exists" = "true" ]; then
               echo "Project $dir_name exists in the products list."
               cp "$file" "sboms/$new_name"
             else
-              echo "Project $dir_name not found in the products list, skipping"
+              echo "Skipping: $dir_name."
             fi
           done
   
       - name: Get SBOMs names
         id: get-sboms
         run: |
-          ls -f ./sboms/
           sboms_list=($(ls -A ./sboms/))
-          echo "sbom list: ${sboms_list[@]}"
-
           sboms_json=$(printf '"%s", ' "${sboms_list[@]}" | sed 's/, $//')
           sboms_json="[$sboms_json]"
 
           echo "sboms=$sboms_json" >> $GITHUB_OUTPUT
-          echo "sboms=${sboms_json}"
+          echo "SBOM names to upload: ${sboms_json}"
 
       - name: Upload sbom
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
@@ -123,6 +118,7 @@ jobs:
             # Print the parsed project name and version
             echo "Project Name: $PROJECT_NAME"
             echo "Project Version: $PROJECT_VERSION"
+            echo "Parent ID: $(printenv "$PROJECT_NAME")"
 
   # store-sbom-data: # stores sbom and metadata in a predefined format for otterdog to pick up
   #   needs: ['generate-sbom']
