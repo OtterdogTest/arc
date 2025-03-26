@@ -137,21 +137,21 @@ jobs:
           path: sboms/
 
   test-matrix:
-      needs: ['generate-sbom']
-      runs-on: ubuntu-latest
-      strategy:
-        matrix:
-          sbom: ${{ fromJson(needs.generate-sbom.outputs.sboms) }}
-          projectName: ${{ fromJson(needs.generate-sbom.outputs.projectnames) }}
-          projectVersion: ${{ fromJson(needs.generate-sbom.outputs.projectversions) }}
-          parentProject: ${{ fromJson(needs.generate-sbom.outputs.parents) }}
-      uses: eclipse-csi/workflows/.github/workflows/store-sbom-data.yml@main
-      with:
-        projectName: ${{ matrix.projectName }}"
-        projectVersion: ${{ matrix.projectVersion }}"
-        bomArtifact: 'sbom'
-        bomFilename: ${{ matrix.sbom }}"
-        parentProject:  ${{ matrix.parentProject }}"
+    needs: ['generate-sbom']
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        sbom: ${{ fromJson(needs.generate-sbom.outputs.sboms) }}
+        projectName: ${{ fromJson(needs.generate-sbom.outputs.projectnames) }}
+        projectVersion: ${{ fromJson(needs.generate-sbom.outputs.projectversions) }}
+        parentProject: ${{ fromJson(needs.generate-sbom.outputs.parents) }}
+    uses: eclipse-csi/workflows/.github/workflows/store-sbom-data.yml@main
+    with:
+      projectName: ${{ matrix.projectName }}"
+      projectVersion: ${{ matrix.projectVersion }}"
+      bomArtifact: 'sbom'
+      bomFilename: ${{ matrix.sbom }}"
+      parentProject:  ${{ matrix.parentProject }}"
 
 
       # steps:
