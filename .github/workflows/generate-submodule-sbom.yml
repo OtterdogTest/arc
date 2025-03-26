@@ -138,14 +138,12 @@ jobs:
 
   test-matrix:
     needs: ['generate-sbom']
-    runs-on: ubuntu-latest
     strategy:
       matrix:
-        target:
-          sbom: ${{ fromJson(needs.generate-sbom.outputs.sboms) }}
-          projectName: ${{ fromJson(needs.generate-sbom.outputs.projectnames) }}
-          projectVersion: ${{ fromJson(needs.generate-sbom.outputs.projectversions) }}
-          parentProject: ${{ fromJson(needs.generate-sbom.outputs.parents) }}
+        sbom: ${{ fromJson(needs.generate-sbom.outputs.sboms) }}
+        projectName: ${{ fromJson(needs.generate-sbom.outputs.projectnames) }}
+        projectVersion: ${{ fromJson(needs.generate-sbom.outputs.projectversions) }}
+        parentProject: ${{ fromJson(needs.generate-sbom.outputs.parents) }}
     uses: eclipse-csi/workflows/.github/workflows/store-sbom-data.yml@main
     with:
       projectName: ${{ matrix.projectName }}"
@@ -153,7 +151,6 @@ jobs:
       bomArtifact: 'sbom'
       bomFilename: ${{ matrix.sbom }}"
       parentProject:  ${{ matrix.parentProject }}"
-
 
       # steps:
       # - name: Print parsed parameters for SBOM
