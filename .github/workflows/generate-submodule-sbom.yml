@@ -76,7 +76,7 @@ jobs:
 
           sboms_string=$(IFS=,; echo "${sboms_list[*]}")
           echo "sbom string: $sboms_string$"
-          
+
           echo "sboms=$sboms_string" >> "$GITHUB_OUTPUT"
 
       - name: Upload sbom
@@ -92,6 +92,13 @@ jobs:
       - name: Print SBOMS
         run: |
           echo "SBOM Files: ${{ needs.generate-sbom.outputs.sboms }}"
+          
+          sboms="${{ needs.generate-sbom.outputs.sboms }}"
+          IFS=',' read -r -a sbom_list <<< "$sboms"
+
+          for sbom in "${sbom_list[@]}"; do
+            echo "Processing SBOM: $sbom"
+          done
 
   # store-sbom-data: # stores sbom and metadata in a predefined format for otterdog to pick up
   #   needs: ['generate-sbom']
