@@ -146,11 +146,11 @@ jobs:
         parentProject: ${{ fromJson(needs.generate-sbom.outputs.parents) }}
     uses: eclipse-csi/workflows/.github/workflows/store-sbom-data.yml@main
     with:
-      projectName: ${{ matrix.projectName }}"
-      projectVersion: ${{ matrix.projectVersion }}"
+      projectName: ${{ matrix.projectName }}
+      projectVersion: ${{ matrix.projectVersion }}
       bomArtifact: 'sbom'
-      bomFilename: ${{ matrix.sbom }}"
-      parentProject:  ${{ matrix.parentProject }}"
+      bomFilename: ${{ matrix.sbom }}
+      parentProject:  ${{ matrix.parentProject }}
 
       # steps:
       # - name: Print parsed parameters for SBOM
