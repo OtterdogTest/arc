@@ -71,8 +71,13 @@ jobs:
         id: get-sboms
         run: |
           ls -f ./sboms/
-          sboms=($(ls -f ./sboms/))
-          echo "All files: ${sboms[@]}"
+          sboms_list=($(ls -f ./sboms/))
+          echo "sbom list: ${sboms_list[@]}"
+
+          sboms_string=$(IFS=,; echo "${sboms_list[*]}")
+          echo "sbom string: $sboms_string$"
+          
+          echo "sboms=$sboms_string" >> "$GITHUB_OUTPUT"
 
       - name: Upload sbom
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
