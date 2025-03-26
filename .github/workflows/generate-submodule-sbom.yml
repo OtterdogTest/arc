@@ -86,31 +86,30 @@ jobs:
           name: sbom
           path: sboms/
 
-  # print-sboms:
-  #   runs-on: ubuntu-latest
-  #   needs: ['generate-sbom']
-  #   steps:
-  #     - name: Print SBOMS
-  #       run: |
-  #         echo "SBOM Files: ${{ needs.generate-sbom.outputs.sboms }}"
-          
-  #         sboms="${{ needs.generate-sbom.outputs.sboms }}"
-  #         IFS=',' read -r -a sbom_list <<< "$sboms"
-
-  #         for sbom in "${sbom_list[@]}"; do
-  #           echo "Processing SBOM: $sbom"
-  #         done
-
-  store-sbom-data-test:
+  test-matrix:
       needs: ['generate-sbom']
       runs-on: ubuntu-latest
       strategy:
         matrix:
           sbom: ${{ fromJson(needs.generate-sbom.outputs.sboms) }}
       steps:
-        - name: Print each sbom name
+        - name: Parse parameters from sboms list
           run: |
-            echo ${{ matrix.sbom }}
+            sbom_name="${{ matrix.sbom }}"
+
+            projectName="${sbom_name%%_bom_*}"
+            
+            projectVersion="${sbom_name#*_bom_}"
+            projectVersion="${projectVersion%.json}"
+
+            echo "PROJECT_NAME=$projectName" >> $GITHUB_ENV
+            echo "PROJECT_VERSION=$projectVersion" >> $GITHUB_ENV
+
+        - name: Print parsed parameters
+          run: |
+            # Print the parsed project name and version
+            echo "Project Name: $PROJECT_NAME"
+            echo "Project Version: $PROJECT_VERSION"
 
   # store-sbom-data: # stores sbom and metadata in a predefined format for otterdog to pick up
   #   needs: ['generate-sbom']
