@@ -105,20 +105,16 @@ jobs:
           run: |
             sbom_name="${{ matrix.sbom }}"
             echo "SBOM_NAME=$sbom_name" >> $GITHUB_ENV
-            echo "SBOM Name: $SBOM_NAME"
 
             projectName="${sbom_name%%_bom_*}"
             echo "PROJECT_NAME=$projectName" >> $GITHUB_ENV
-            echo "Project Name: $PROJECT_NAME"
             
             projectVersion="${sbom_name#*_bom_}"
             projectVersion="${projectVersion%.json}"
             echo "PROJECT_VERSION=$projectVersion" >> $GITHUB_ENV
-            echo "Project Version: $PROJECT_VERSION"
 
-            parentProject="$(printenv "$PROJECT_NAME")"
+            parentProject="$(printenv "$projectName")"
             echo "PARENT_PROJECT=$parentProject" >> $GITHUB_ENV
-            echo "Parent ID: $PARENT_PROJECT"
 
         - name: Print parsed parameters
           run: |
