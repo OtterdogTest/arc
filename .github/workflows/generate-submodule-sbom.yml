@@ -100,6 +100,17 @@ jobs:
             echo "Processing SBOM: $sbom"
           done
 
+  test-matrix:
+      needs: ['generate-sbom']
+      runs-on: ubuntu-latest
+      strategy:
+        matrix:
+          sbom: ${{ fromJson(needs.generate-sbom.outputs.sboms) }}
+      steps:
+        - name: Print each sbom name
+          run: |
+            echo ${{ matrix.sbom }}
+
   # store-sbom-data: # stores sbom and metadata in a predefined format for otterdog to pick up
   #   needs: ['generate-sbom']
   #   uses: eclipse-csi/workflows/.github/workflows/store-sbom-data.yml@main
