@@ -71,7 +71,7 @@ jobs:
         id: get-sboms
         run: |
           ls -f ./sboms/
-          sboms_list=($(ls -f ./sboms/))
+          sboms_list=($(ls -A -f ./sboms/))
           echo "sbom list: ${sboms_list[@]}"
 
           sboms_string=$(IFS=,; echo "${sboms_list[*]}")
