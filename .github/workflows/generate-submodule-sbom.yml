@@ -104,16 +104,16 @@ jobs:
         - name: Parse parameters from sboms list
           run: |
             sbom_name="${{ matrix.sbom }}"
+            echo "SBOM_NAME=$sbom_name" >> $GITHUB_ENV
 
             projectName="${sbom_name%%_bom_*}"
+            echo "PROJECT_NAME=$projectName" >> $GITHUB_ENV
             
             projectVersion="${sbom_name#*_bom_}"
             projectVersion="${projectVersion%.json}"
-            parentProject="$(printenv "$PROJECT_NAME")"
-
-            echo "PROJECT_NAME=$projectName" >> $GITHUB_ENV
             echo "PROJECT_VERSION=$projectVersion" >> $GITHUB_ENV
-            echo "SBOM_NAME=$sbom_name" >> $GITHUB_ENV
+
+            parentProject="$(printenv "$PROJECT_NAME")"
             echo "PARENT_PROJECT=$parentProject" >> $GITHUB_ENV
 
         - name: Print parsed parameters
