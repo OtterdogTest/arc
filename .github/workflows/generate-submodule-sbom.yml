@@ -70,9 +70,9 @@ jobs:
             
             # Check if dir_name exists in the PROJECTS mapping
             echo $dir_name
-            exists=$(printenv $dir_name)
+            exists=$(printenv "$dir_name" >/dev/null && echo "true" || echo "false")
             echo "exists: $exists"
-            if [[ -n "$exists" ]]; then
+            if [ "$exists" = "true" ]; then
               echo "Project $dir_name exists in the products list."
               cp "$file" "sboms/$new_name"
             else
