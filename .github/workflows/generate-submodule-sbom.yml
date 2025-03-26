@@ -75,7 +75,7 @@ jobs:
           echo "sbom list: ${sboms_list[@]}"
 
           sboms_json=$(printf "%s\n" "${sboms_list[@]}" | jq -R . | jq -s .)
-          echo "sbom json: $sboms_json$"
+          echo "sbom json: $sboms_json"
 
           echo "sboms=$sboms_json" >> "$GITHUB_OUTPUT"
 
