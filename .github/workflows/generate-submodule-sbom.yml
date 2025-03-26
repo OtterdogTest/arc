@@ -70,7 +70,8 @@ jobs:
       - name: Get SBOMs names
         id: get-sboms
         run: |
-          sboms=($(ls -f sboms/))
+          ls -f ./sboms/
+          sboms=($(ls -f ./sboms/))
           echo $sboms
 
       - name: Upload sbom
