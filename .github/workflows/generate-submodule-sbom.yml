@@ -133,12 +133,22 @@ jobs:
           name: sbom
           path: sboms/
 
-  # test-matrix:
-  #     needs: ['generate-sbom']
-  #     runs-on: ubuntu-latest
-  #     strategy:
-  #       matrix:
-  #         sbom: ${{ fromJson(needs.generate-sbom.outputs.sboms) }}
+  test-matrix:
+      needs: ['generate-sbom']
+      runs-on: ubuntu-latest
+      strategy:
+        matrix:
+          sbom: ${{ fromJson(needs.generate-sbom.outputs.sboms) }}
+          projectName: ${{ fromJson(needs.generate-sbom.outputs.projectnames) }}
+          projectVersion: ${{ fromJson(needs.generate-sbom.outputs.projectversions) }}
+          parentProject: ${{ fromJson(needs.generate-sbom.outputs.parents) }}
+      steps:
+      - name: Print parsed parameters for SBOM
+        run: |
+          echo "SBOM: ${{ matrix.sbom }}"
+          echo "Project Name: ${{ matrix.projectName }}"
+          echo "Project Version: ${{ matrix.projectVersion }}"
+          echo "Parent Project: ${{ matrix.parentProject }}"
       # steps:
       #   - name: Parse parameters from sboms list
       #     run: |
