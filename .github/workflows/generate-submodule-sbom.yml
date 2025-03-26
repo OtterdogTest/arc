@@ -74,10 +74,10 @@ jobs:
           sboms_list=($(ls -A ./sboms/))
           echo "sbom list: ${sboms_list[@]}"
 
-          sboms_json=$(printf "%s\n" "${sboms_list[@]}" | jq -R . | jq -s .)
-          echo "sbom json: $sboms_json"
+          sboms_string=$(IFS=,; echo "${sboms_list[*]}")
+          echo "sbom string: $sboms_string$"
 
-          echo "sboms=$sboms_json" >> "$GITHUB_OUTPUT"
+          echo "sboms=$sboms_string" >> "$GITHUB_OUTPUT"
 
       - name: Upload sbom
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
@@ -91,14 +91,21 @@ jobs:
     steps:
       - name: Print SBOMS
         run: |
-          echo "SBOM json: ${{ needs.generate-sbom.outputs.sboms }}"
+          echo "SBOM Files: ${{ needs.generate-sbom.outputs.sboms }}"
+          
+          sboms="${{ needs.generate-sbom.outputs.sboms }}"
+          IFS=',' read -r -a sbom_list <<< "$sboms"
+
+          for sbom in "${sbom_list[@]}"; do
+            echo "Processing SBOM: $sbom"
+          done
 
   test-matrix:
       needs: ['generate-sbom']
       runs-on: ubuntu-latest
       strategy:
         matrix:
-          sbom: ${{ fromJson(needs.generate-sbom.outputs.sboms) }}
+          sbom: ${{needs.generate-sbom.outputs.sboms}}
       steps:
         - name: Print each sbom name
           run: |
