@@ -105,7 +105,7 @@ jobs:
           run: |
             # Print the parsed project name and version
             echo "Project Name: ${matrix.sbom%%_bom_*}"
-            echo "Project Version: $${{ ${sbom_name#*_bom_}" && projectVersion="${projectVersion%.json}}}"
+            echo "Project Version: $${{ ${matrix.sbom#*_bom_}" && projectVersion="${projectVersion%.json}}}"
             echo "SBOM Name: ${{ matrix.sbom }}"
             echo "Parent ID: $(printenv "${${{ matrix.sbom }}%%_bom_*}")"
       # uses: eclipse-csi/workflows/.github/workflows/store-sbom-data.yml@main
