@@ -70,7 +70,7 @@ jobs:
       - name: Get SBOMs names
         id: get-sboms
         run: |
-          sboms=($(ls /path/to/directory))
+          sboms=($(ls ./sboms/))
           echo "Files: $sboms"
 
       - name: Upload sbom
