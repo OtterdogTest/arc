@@ -18,8 +18,8 @@ env:
   JAVA_VERSION: '21'
   JAVA_DISTRO: 'temurin'
   arc-spring-boot-starter: '5460d2f8-38c3-478e-9934-46fddb6b7794'
-  # arc-streaming-spring-boot-starter: 'f359703e-da69-4e4a-9162-acdd065752ad'
-  # arc-view-spring-boot-starter: 'be1b9fea-6c7e-42b3-9f6f-db4102acc085'
+  arc-streaming-spring-boot-starter: 'f359703e-da69-4e4a-9162-acdd065752ad'
+  arc-view-spring-boot-starter: 'be1b9fea-6c7e-42b3-9f6f-db4102acc085'
 
 
 permissions:
@@ -151,22 +151,3 @@ jobs:
       bomArtifact: 'sbom'
       bomFilename: ${{ matrix.sbom }}
       parentProject:  ${{ matrix.parentProject }}
-
-      # steps:
-      # - name: Print parsed parameters for SBOM
-      #   run: |
-      #     echo "SBOM: ${{ matrix.sbom }}"
-      #     echo "Project Name: ${{ matrix.projectName }}"
-      #     echo "Project Version: ${{ matrix.projectVersion }}"
-      #     echo "Parent Project: ${{ matrix.parentProject }}"
-
-
-  # store-sbom-data: # stores sbom and metadata in a predefined format for otterdog to pick up
-  #   needs: ['generate-sbom']
-  #   uses: eclipse-csi/workflows/.github/workflows/store-sbom-data.yml@main
-  #   with:
-  #     projectName: 'arc'
-  #     projectVersion: ${{ needs.generate-sbom.outputs.project-version }}
-  #     bomArtifact: 'sbom'
-  #     bomFilename: 'bom.json'
-  #     parentProject: ''
