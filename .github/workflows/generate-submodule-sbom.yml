@@ -30,6 +30,9 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       sboms: ${{ steps.get-sboms.outputs.sboms }}
+      sboms: ${{ steps.get-sboms.outputs.projectnames }}
+      sboms: ${{ steps.get-sboms.outputs.projectversions }}
+      sboms: ${{ steps.get-sboms.outputs.parents }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
