@@ -69,6 +69,7 @@ jobs:
             new_name="${dir_name}_bom_${version}.json"
             
             # Check if dir_name exists in the PROJECTS mapping
+            echo $dir_name
             exists=$(printenv $dir_name)
             echo "exists: $exists"
             if [[ -n "$exists" ]]; then
