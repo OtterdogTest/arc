@@ -69,7 +69,8 @@ jobs:
             new_name="${dir_name}_bom_${version}.json"
             
             # Check if dir_name exists in the PROJECTS mapping
-            if [[ -n "${{ env.$dir_name }}" ]]; then
+            exists=$(printenv $dir_name)
+            if [[ -n "$exists" ]]; then
               echo "Project $dir_name exists in the products list."
               cp "$file" "sboms/$new_name"
             else
