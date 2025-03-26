@@ -124,14 +124,14 @@ jobs:
             echo "SBOM Name: $SBOM_NAME"
             echo "Parent ID: $PARENT_PROJECT"
 
-        # - name: Upload to DependencyTrack
-        #   uses: eclipse-csi/workflows/.github/workflows/store-sbom-data.yml@main
-        #   with:
-        #     projectName: ${{ env.PROJECT_NAME }}
-        #     projectVersion: ${{ env.PROJECT_VERSION }}
-        #     bomArtifact: 'sbom'
-        #     bomFilename: '${{ env.SBOM_NAME }}'
-        #     parentProject: '${{ env.PARENT_PROJECT }}'
+        - name: Upload to DependencyTrack
+          uses: eclipse-csi/workflows/.github/workflows/store-sbom-data.yml@main
+          with:
+            projectName: ${{ env.PROJECT_NAME }}
+            projectVersion: ${{ env.PROJECT_VERSION }}
+            bomArtifact: 'sbom'
+            bomFilename: '${{ env.SBOM_NAME }}'
+            parentProject: '${{ env.PARENT_PROJECT }}'
 
 
   # store-sbom-data: # stores sbom and metadata in a predefined format for otterdog to pick up
