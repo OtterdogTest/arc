@@ -109,7 +109,7 @@ jobs:
             
             projectVersion="${sbom_name#*_bom_}"
             projectVersion="${projectVersion%.json}"
-            parentProject=$(printenv "$PROJECT_NAME")
+            parentProject="$(printenv "$PROJECT_NAME")"
 
             echo "PROJECT_NAME=$projectName" >> $GITHUB_ENV
             echo "PROJECT_VERSION=$projectVersion" >> $GITHUB_ENV
