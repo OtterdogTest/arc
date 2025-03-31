@@ -5,27 +5,38 @@
 name: Release
 
 on:
-  workflow_dispatch:
-    inputs:
-      release-type:
-        type: choice
-        description: What do you want to release?
-        options: 
-        - Milestone
-        - Release
+  push:
+      branches: 
+        - "generate-main-sbom"
 
 jobs:
   CI:
-    uses: eclipse-lmos/.github/.github/workflows/gradle-release.yml@main
-    permissions:
-      contents: write
-      packages: write
-    secrets:
-      oss-username: ${{ secrets.OSSRH_USERNAME }}
-      oss-password: ${{ secrets.OSSRH_PASSWORD }}
-      bot-token: ${{ secrets.LMOS_BOT_TOKEN }}
-      signing-key-id: ${{ secrets.GPG_SUBKEY_ID }}
-      signing-key: ${{ secrets.GPG_PRIVATE_KEY }}
-      signing-key-password: ${{ secrets.GPG_PASSPHRASE }}
-    with:
-      release-type: ${{ github.event.inputs.release-type }}
+    - name: Introduce delay for release publishing
+      run: |
+        sleep 60s
+
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       release-type:
+#         type: choice
+#         description: What do you want to release?
+#         options: 
+#         - Milestone
+#         - Release
+
+# jobs:
+#   CI:
+#     uses: eclipse-lmos/.github/.github/workflows/gradle-release.yml@main
+#     permissions:
+#       contents: write
+#       packages: write
+#     secrets:
+#       oss-username: ${{ secrets.OSSRH_USERNAME }}
+#       oss-password: ${{ secrets.OSSRH_PASSWORD }}
+#       bot-token: ${{ secrets.LMOS_BOT_TOKEN }}
+#       signing-key-id: ${{ secrets.GPG_SUBKEY_ID }}
+#       signing-key: ${{ secrets.GPG_PRIVATE_KEY }}
+#       signing-key-password: ${{ secrets.GPG_PASSPHRASE }}
+#     with:
+#       release-type: ${{ github.event.inputs.release-type }}
