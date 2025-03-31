@@ -11,9 +11,11 @@ on:
 
 jobs:
   CI:
-    - name: Introduce delay for release publishing
-      run: |
-        sleep 60s
+    runs-on: ubuntu-lates
+    steps: 
+      - name: Introduce delay for release publishing
+        run: |
+          sleep 60s
 
 # on:
 #   workflow_dispatch:
