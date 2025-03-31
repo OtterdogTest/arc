@@ -15,3 +15,6 @@ jobs:
     steps:
       - name: Pause workflow run
         run: sleep 60s
+      - name: Print success
+        run: |
+          echo "Finished successfully."
