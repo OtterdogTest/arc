@@ -2,7 +2,7 @@ name: Generate Gradle SBOM
 
 on:
   workflow_run:
-    workflows: [Release Test]
+    workflows: [Release]
     types: [completed]
   push:
     branches: 
@@ -51,17 +51,7 @@ jobs:
         id: version
         shell: bash
         run: |
-          event="${{ github.event_name }}"
-          ref="${{ github.ref }}"
-          input="${{ github.event.inputs.version }}"
-
           VERSION="$(jq -r '.metadata.component.version' < ./${{ env.PRODUCT_PATH }}build/reports/bom.json)"
-
-          if [[ "$event" == "push" && "$ref" == refs/heads/* ]] || \
-            [[ "$event" == "workflow_dispatch" && ! "$input" =~ ^v ]]; then
-            VERSION="${VERSION}@dev"
-          fi
-
           echo "PROJECT_VERSION=$VERSION" >> $GITHUB_OUTPUT
           echo "Product version is: $VERSION"
 
