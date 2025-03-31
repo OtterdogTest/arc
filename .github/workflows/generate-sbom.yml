@@ -4,6 +4,9 @@ on:
   workflow_run:
     workflows: [Release Test]
     types: [completed]
+  push:
+    branches: 
+      - "generate-main-sbom"
   workflow_dispatch:
     inputs:
       version:
