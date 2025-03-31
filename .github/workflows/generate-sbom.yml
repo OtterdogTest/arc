@@ -1,12 +1,9 @@
 name: Generate Gradle SBOM
 
 on:
-  push:
-    branches: 
-      - "main"
-      - "generate-main-sbom"
-    tags:
-      - "v*"
+  workflow_run:
+    workflows: [Release Test]
+    types: [completed]
   workflow_dispatch:
     inputs:
       version:
