@@ -11,7 +11,7 @@ on:
 
 jobs:
   CI:
-    runs-on: ubuntu-lates
+    runs-on: ubuntu-latest
     steps: 
       - name: Introduce delay for release publishing
         run: |
